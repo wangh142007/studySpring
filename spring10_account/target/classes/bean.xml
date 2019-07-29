@@ -7,18 +7,21 @@
     <bean id="accountService" class="com.wh.service.impl.AccountServiceImpl">
         <!--注入dao对象-->
         <property name="accountDao" ref="accountDao"></property>
+        <!--注入ConnectionUtils-->
+        <property name="txManager" ref="txManager"></property>
     </bean>
 
     <!--配置dao对象-->
     <bean id="accountDao" class="com.wh.dao.impl.AccountDaoImpl">
         <!--注入QueryRunner-->
         <property name="queryRunner" ref="queryRunner"></property>
+        <!--注入ConnectionUtils-->
+        <property name="connectionUtils" ref="connectionUtils"></property>
+
     </bean>
 
     <!--配置QueryRunner-->
     <bean id="queryRunner" class="org.apache.commons.dbutils.QueryRunner" scope="prototype">
-        <!--注入数据源-->
-        <constructor-arg name="ds" ref="dataSource"></constructor-arg>
     </bean>
 
     <!--配置数据源-->
@@ -28,5 +31,17 @@
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/user"></property>
         <property name="user" value="root"></property>
         <property name="password" value="1234"></property>
+    </bean>
+
+    <!--配置connection的工具类, ConnectionUtils -->
+    <bean id="connectionUtils" class="com.wh.utils.ConnectionUtils">
+        <!--注入一个数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="txManager" class="com.wh.utils.TransactionManager">
+        <!--注入ConnectionUtils-->
+        <property name="connectionUtils" ref="connectionUtils"></property>
     </bean>
 </beans>
